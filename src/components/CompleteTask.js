@@ -13,28 +13,28 @@ function CompleteTask(props) {
           <li>
             <div className="wrapItem">
               <input type="checkbox" />
-              <label>Hoc HTML CSS</label>
+              <label>Hoc Java</label>
               <button className="far fa-star"></button>
             </div>
           </li>
           <li>
             <div className="wrapItem">
               <input type="checkbox" />
-              <label>Hoc Javascript</label>
+              <label>Hoc UI UX</label>
               <button className="far fa-star"></button>
             </div>
           </li>
           <li>
             <div className="wrapItem">
               <input type="checkbox" />
-              <label>Hoc Reactjs</label>
+              <label>Hoc English</label>
               <button className="far fa-star"></button>
             </div>
           </li>
           <li>
             <div className="wrapItem">
               <input type="checkbox" />
-              <label>Hoc ES6</label>
+              <label>Hoc Writing</label>
               <button className="far fa-star"></button>
             </div>
           </li>
