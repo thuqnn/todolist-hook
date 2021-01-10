@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { DownOutlined, StarOutlined } from "@ant-design/icons";
 import classes from "./CompleteTask.module.css";
 
-function CompleteTask(props) {
+function CompleteTask({ ischecked, taskLists, maskTaskCompleted }) {
   return (
     <div className={classes.completed}>
       <section className={classes.listCompleted}>
@@ -12,42 +12,19 @@ function CompleteTask(props) {
           <span> 157</span>
         </div>
         <ul>
-          <li>
-            <div className={classes.wrapItem}>
-              <div className={classes.wrap}>
-                <input type="checkbox" />
-                <label>Hoc Java</label>
-              </div>
-              <StarOutlined />
-            </div>
-          </li>
-          <li>
-            <div className={classes.wrapItem}>
-              <div className={classes.wrap}>
-                <input type="checkbox" />
-                <label>Hoc UI UX</label>
-              </div>
-              <StarOutlined />
-            </div>
-          </li>
-          <li>
-            <div className={classes.wrapItem}>
-              <div className={classes.wrap}>
-                <input type="checkbox" />
-                <label>Hoc English</label>
-              </div>
-              <StarOutlined />
-            </div>
-          </li>
-          <li>
-            <div className={classes.wrapItem}>
-              <div className={classes.wrap}>
-                <input type="checkbox" />
-                <label>Hoc Writing</label>
-              </div>
-              <StarOutlined />
-            </div>
-          </li>
+          {taskLists.map((task) => {
+            return (
+              <li key={task.id}>
+                <div className={classes.wrapItem}>
+                  <div className={classes.wrap}>
+                    <input type="checkbox" />
+                    <label>{task.item}</label>
+                  </div>
+                  <StarOutlined />
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </section>
     </div>
