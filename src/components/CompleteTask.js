@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DownOutlined, StarOutlined } from "@ant-design/icons";
 import classes from "./CompleteTask.module.css";
 
-function CompleteTask({ ischecked, taskLists, maskTaskCompleted }) {
+function CompleteTask({ completeItems, maskTasUncompleted, checked }) {
   return (
     <div className={classes.completed}>
       <section className={classes.listCompleted}>
@@ -12,12 +12,17 @@ function CompleteTask({ ischecked, taskLists, maskTaskCompleted }) {
           <span> 157</span>
         </div>
         <ul>
-          {taskLists.map((task) => {
+          {completeItems.map((task) => {
             return (
               <li key={task.id}>
                 <div className={classes.wrapItem}>
                   <div className={classes.wrap}>
-                    <input type="checkbox" />
+                    <input
+                      name={task.item}
+                      type="checkbox"
+                      checked={task.isCompleted ? checked : ""}
+                      onClick={() => maskTasUncompleted(task.id)}
+                    />
                     <label>{task.item}</label>
                   </div>
                   <StarOutlined />

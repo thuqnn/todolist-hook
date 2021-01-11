@@ -3,16 +3,20 @@ import React from "react";
 
 import { StarOutlined } from "@ant-design/icons";
 
-function TaskList({ ischecked, taskLists, onHandleClicked }) {
+function TaskList({ incompleteItems, maskTaskCompleted }) {
   return (
     <section className={classes.listTask}>
       <ul>
-        {taskLists.map((task) => {
+        {incompleteItems.map((task) => {
           return (
             <li key={task.id}>
               <div className={classes.wrapItem}>
                 <div className={classes.wrap}>
-                  <input type="checkbox" onClick={onHandleClicked} />
+                  <input
+                    name={task.item}
+                    type="checkbox"
+                    onClick={() => maskTaskCompleted(task.id)}
+                  />
                   <label>{task.item}</label>
                 </div>
                 <StarOutlined />

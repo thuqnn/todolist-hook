@@ -9,10 +9,7 @@ import "./App.css";
 function App() {
   const [currentItem, setCurrentItem] = useState(""); //input = ""
   const [taskLists, setTaskLists] = useState([]); //data = []
-  const [ischecked, setIsChecked] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
-
-  console.log(taskLists);
+  const [checked] = useState(true);
   const onHandleChange = (value) => {
     setCurrentItem(value);
   };
@@ -26,18 +23,23 @@ function App() {
     }
   };
 
-  const onHandleClicked = () => {
-    setIsChecked(!ischecked);
-    //when click true (not click is false)
-    maskTaskCompleted();
+  const maskTaskCompleted = (id) => {
+    const tasks = taskLists.find((task) => task.id === id);
+    tasks.isCompleted = true;
+    setTaskLists((taskLists) => [
+      ...taskLists.filter((x) => x.id !== id),
+      tasks,
+    ]);
   };
-
-  const maskTaskCompleted = () => {
-    if (!ischecked) {
-      setIsCompleted([...taskLists]);
-    } else {
-      return console.log(!ischecked);
-    }
+  const incompleteItems = taskLists.filter((x) => !x.isCompleted);
+  const completeItems = taskLists.filter((x) => x.isCompleted);
+  const maskTasUncompleted = (id) => {
+    const tasks = taskLists.find((task) => task.id === id);
+    tasks.isCompleted = false;
+    setTaskLists((taskLists) => [
+      ...taskLists.filter((x) => x.id !== id),
+      tasks,
+    ]);
   };
   return (
     <div className="App">
@@ -47,14 +49,13 @@ function App() {
         currentItem={currentItem}
       />
       <TaskList
-        taskLists={taskLists}
-        onHandleClicked={onHandleClicked}
-        ischecked={ischecked}
+        maskTaskCompleted={maskTaskCompleted}
+        incompleteItems={incompleteItems}
       />
       <CompleteTask
-        ischecked={ischecked}
-        taskLists={taskLists}
-        maskTaskCompleted={maskTaskCompleted}
+        completeItems={completeItems}
+        checked={checked}
+        maskTasUncompleted={maskTasUncompleted}
       />
     </div>
   );
