@@ -10,14 +10,21 @@ function App() {
   const [currentItem, setCurrentItem] = useState(""); //input = ""
   const [taskLists, setTaskLists] = useState([]); //data = []
   const [checked] = useState(true);
+
   const onHandleChange = (value) => {
     setCurrentItem(value);
   };
+
   const onHandeEnter = (event) => {
     if (event.keyCode === 13) {
       setTaskLists([
         ...taskLists,
-        { item: currentItem, id: new Date().getTime(), isCompleted: false },
+        {
+          item: currentItem,
+          id: new Date().getTime(),
+          isCompleted: false,
+          isFavorite: false,
+        },
       ]); //[{}] mot mang object
       setCurrentItem("");
     }
@@ -31,8 +38,10 @@ function App() {
       tasks,
     ]);
   };
+
   const incompleteItems = taskLists.filter((x) => !x.isCompleted);
   const completeItems = taskLists.filter((x) => x.isCompleted);
+
   const maskTasUncompleted = (id) => {
     const tasks = taskLists.find((task) => task.id === id);
     tasks.isCompleted = false;
@@ -40,6 +49,17 @@ function App() {
       ...taskLists.filter((x) => x.id !== id),
       tasks,
     ]);
+  };
+
+  const onHandleFavorite = (id) => {
+    const checkFavorite = (taskLists.isFavorite = true);
+    if (checkFavorite) {
+      const findId = taskLists.find((item) => item.id === id);
+      setTaskLists((taskLists) => [
+        findId,
+        ...taskLists.filter((item) => item.id !== id),
+      ]);
+    }
   };
   return (
     <div className="App">
@@ -51,6 +71,7 @@ function App() {
       <TaskList
         maskTaskCompleted={maskTaskCompleted}
         incompleteItems={incompleteItems}
+        onHandleFavorite={onHandleFavorite}
       />
       <CompleteTask
         completeItems={completeItems}
