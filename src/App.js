@@ -18,15 +18,17 @@ function App() {
 
   const onHandeEnter = (event) => {
     if (event.keyCode === 13) {
-      setTaskLists([
-        ...taskLists,
-        {
-          item: currentItem,
-          id: new Date().getTime(),
-          isCompleted: false,
-          isFavorite: false,
-        },
-      ]);
+      setTaskLists(
+        [
+          {
+            item: currentItem,
+            id: new Date().getTime(),
+            isCompleted: false,
+            isFavorite: false,
+          },
+          ...taskLists,
+        ].sort((a, b) => a.id - b.id)
+      );
       setCurrentItem("");
     }
   };
@@ -34,10 +36,11 @@ function App() {
   const maskTaskCompleted = (id) => {
     const tasks = taskLists.find((task) => task.id === id);
     tasks.isCompleted = true;
-    setTaskLists((taskLists) => [
-      ...taskLists.filter((item) => item.id !== id),
-      tasks,
-    ]);
+    setTaskLists((taskLists) =>
+      [tasks, ...taskLists.filter((item) => item.id !== id)].sort(
+        (a, b) => a.id - b.id
+      )
+    );
   };
 
   const incompleteItems = taskLists.filter((item) => !item.isCompleted);
@@ -46,10 +49,11 @@ function App() {
   const maskTaskUncompleted = (id) => {
     const tasks = taskLists.find((task) => task.id === id);
     tasks.isCompleted = false;
-    setTaskLists((taskLists) => [
-      ...taskLists.filter((item) => item.id !== id),
-      tasks,
-    ]);
+    setTaskLists((taskLists) =>
+      [...taskLists.filter((item) => item.id !== id), tasks].sort(
+        (a, b) => a.id - b.id
+      )
+    );
   };
 
   const onHandleFavorite = (id) => {
