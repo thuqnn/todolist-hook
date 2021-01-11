@@ -61,3 +61,11 @@
 .completed .listCompleted .totalComplete {
   padding: 10px 30px;
 }
+
+.completed .listCompleted .show {
+  visibility: hidden;
+  transition: all 0.4s ease-out;
+}
+.completed .listCompleted .hide {
+  visibility: visible;
+}
