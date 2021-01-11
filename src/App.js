@@ -10,6 +10,7 @@ function App() {
   const [currentItem, setCurrentItem] = useState(""); //input = ""
   const [taskLists, setTaskLists] = useState([]); //data = []
   const [checked] = useState(true);
+  const [selected, setSelected] = useState("");
 
   const onHandleChange = (value) => {
     setCurrentItem(value);
@@ -42,7 +43,7 @@ function App() {
   const incompleteItems = taskLists.filter((item) => !item.isCompleted);
   const completeItems = taskLists.filter((item) => item.isCompleted);
 
-  const maskTasUncompleted = (id) => {
+  const maskTaskUncompleted = (id) => {
     const tasks = taskLists.find((task) => task.id === id);
     tasks.isCompleted = false;
     setTaskLists((taskLists) => [
@@ -53,6 +54,7 @@ function App() {
 
   const onHandleFavorite = (id) => {
     const checkFavorite = (taskLists.isFavorite = true);
+
     if (checkFavorite) {
       const findId = taskLists.find((item) => item.id === id);
       setTaskLists((taskLists) => [
@@ -60,7 +62,9 @@ function App() {
         ...taskLists.filter((item) => item.id !== id),
       ]);
     }
+    setSelected({ id });
   };
+
   return (
     <div className="App">
       <Header
@@ -72,11 +76,12 @@ function App() {
         maskTaskCompleted={maskTaskCompleted}
         incompleteItems={incompleteItems}
         onHandleFavorite={onHandleFavorite}
+        selected={selected}
       />
       <CompleteTask
         completeItems={completeItems}
         checked={checked}
-        maskTasUncompleted={maskTasUncompleted}
+        maskTaskUncompleted={maskTaskUncompleted}
       />
     </div>
   );

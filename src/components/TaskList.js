@@ -1,9 +1,14 @@
 import classes from "./TaskList.module.css";
-import React, { useState } from "react";
+import React from "react";
 
-import { StarFilled, StarOutlined } from "@ant-design/icons";
+import { StarOutlined } from "@ant-design/icons";
 
-function TaskList({ incompleteItems, maskTaskCompleted, onHandleFavorite }) {
+function TaskList({
+  incompleteItems,
+  maskTaskCompleted,
+  onHandleFavorite,
+  selected,
+}) {
   return (
     <section className={classes.listTask}>
       <ul>
@@ -19,7 +24,12 @@ function TaskList({ incompleteItems, maskTaskCompleted, onHandleFavorite }) {
                   />
                   <label>{task.item}</label>
                 </div>
-                {<StarOutlined onClick={() => onHandleFavorite(task.id)} />}
+                <StarOutlined
+                  onClick={() => onHandleFavorite(task.id)}
+                  style={{
+                    color: selected.id === task.id ? "red" : null,
+                  }}
+                />
               </div>
             </li>
           );
