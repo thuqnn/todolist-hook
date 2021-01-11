@@ -25,7 +25,7 @@ function App() {
           isCompleted: false,
           isFavorite: false,
         },
-      ]); //[{}] mot mang object
+      ]);
       setCurrentItem("");
     }
   };
@@ -34,19 +34,19 @@ function App() {
     const tasks = taskLists.find((task) => task.id === id);
     tasks.isCompleted = true;
     setTaskLists((taskLists) => [
-      ...taskLists.filter((x) => x.id !== id),
+      ...taskLists.filter((item) => item.id !== id),
       tasks,
     ]);
   };
 
-  const incompleteItems = taskLists.filter((x) => !x.isCompleted);
-  const completeItems = taskLists.filter((x) => x.isCompleted);
+  const incompleteItems = taskLists.filter((item) => !item.isCompleted);
+  const completeItems = taskLists.filter((item) => item.isCompleted);
 
   const maskTasUncompleted = (id) => {
     const tasks = taskLists.find((task) => task.id === id);
     tasks.isCompleted = false;
     setTaskLists((taskLists) => [
-      ...taskLists.filter((x) => x.id !== id),
+      ...taskLists.filter((item) => item.id !== id),
       tasks,
     ]);
   };
