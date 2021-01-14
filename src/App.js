@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import _ from "lodash";
 import CompleteTask from "./components/CompleteTask";
 import Header from "./components/Header";
 import TaskList from "./components/TaskList";
@@ -7,59 +7,61 @@ import TaskList from "./components/TaskList";
 import "./App.css";
 
 function App() {
-  const [taskLists, setTaskLists] = useState([]); //data = []
-  const [checked] = useState(true);
-  const [selectedCompleted, setSelectedCompleted] = useState("");
+  const [taskLists, setTaskLists] = useState([]);
 
-  const markTaskCompleted = (id) => {
-    const tasks = taskLists.find((task) => task.id === id);
-    setTaskLists((taskLists) => [
-      { ...tasks, isCompleted: true },
-      ...taskLists.filter((item) => item.id !== id),
+  const handleAddTodo = (newTaskName) => {
+    setTaskLists([
+      ...taskLists,
+      {
+        id: new Date().getTime(),
+        createdDate: new Date().getTime(),
+        completedDate: null,
+        taskName: newTaskName,
+        isCompleted: false,
+        isFavorite: false,
+      },
     ]);
   };
 
-  const incompleteItems = taskLists
-    .filter((task) => !task.isCompleted)
-    .sort((a, b) => b.id - a.id);
-
-  const completeItems = taskLists
-    .filter((task) => task.isCompleted)
-    .sort((a, b) => a[0] - b[1]);
-
-  const markTaskUncompleted = (id) => {
-    const tasks = taskLists.find((task) => task.id === id);
-    setTaskLists((taskLists) => [
-      ...taskLists.filter((item) => item.id !== id),
-      { ...tasks, isCompleted: false },
-    ]);
+  const handleChangeCompleteStatus = (taskId, newStatus) => {
+    setTaskLists(
+      taskLists.map((t) =>
+        t.id === taskId
+          ? {
+              ...t,
+              isCompleted: newStatus,
+              completedDate: new Date().getTime(),
+            }
+          : t
+      )
+    );
   };
-  const onHandleFavorite = (id) => {
-    const checkFavorite = (taskLists.isFavorite = true);
 
-    if (checkFavorite) {
-      const findId = taskLists.find((item) => item.id === id);
-      setTaskLists((taskLists) => [
-        findId,
-        ...taskLists.filter((item) => item.id !== id),
-      ]);
-    }
-    setSelectedCompleted({ id });
+  const handleChangeFavoriteStatus = (taskId, newStatus) => {
+    setTaskLists(
+      taskLists.map((t) =>
+        t.id === taskId ? { ...t, isFavorite: newStatus } : t
+      )
+    );
   };
+
+  const [completedList, inCompletedList] = _.partition(
+    taskLists,
+    (t) => t.isCompleted
+  );
 
   return (
     <div className="App">
-      <Header setTaskLists={setTaskLists} taskLists={taskLists} />
+      <Header onAddTodo={handleAddTodo} />
       <TaskList
-        markTaskCompleted={markTaskCompleted}
-        incompleteItems={incompleteItems}
-        onHandleFavorite={onHandleFavorite}
-        selectedCompleted={selectedCompleted}
+        incompleteItems={inCompletedList}
+        onChangeCompleteStatus={handleChangeCompleteStatus}
+        onChangeFavoriteStatus={handleChangeFavoriteStatus}
       />
       <CompleteTask
-        completeItems={completeItems}
-        checked={checked}
-        markTaskUncompleted={markTaskUncompleted}
+        completedItems={completedList}
+        onChangeCompleteStatus={handleChangeCompleteStatus}
+        onChangeFavoriteStatus={handleChangeFavoriteStatus}
       />
     </div>
   );

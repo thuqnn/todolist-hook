@@ -1,26 +1,25 @@
-import classes from "./TaskList.module.css";
 import React from "react";
-import TaskListItems from "./TaskListItems";
+import _ from "lodash";
+import ListItem from "./ListItem";
 
 function TaskList({
   incompleteItems,
-  markTaskCompleted,
-  onHandleFavorite,
-  selectedCompleted,
+  onChangeCompleteStatus,
+  onChangeFavoriteStatus,
 }) {
+  const sortedInCompletedListItem = _.orderBy(
+    incompleteItems,
+    ["isFavorite", "createdDate"],
+    ["desc", "desc"]
+  );
+
   return (
-    <section className={classes.listTask}>
-      <ul>
-        {incompleteItems.map((task) => (
-          <TaskListItems
-            task={task}
-            selectedCompleted={selectedCompleted}
-            markTaskCompleted={markTaskCompleted}
-            onHandleFavorite={onHandleFavorite}
-          />
-        ))}
-      </ul>
-    </section>
+    <ListItem
+      listName="Tasks"
+      renderedItems={sortedInCompletedListItem}
+      onChangeCompleteStatus={onChangeCompleteStatus}
+      onChangeFavoriteStatus={onChangeFavoriteStatus}
+    />
   );
 }
 
