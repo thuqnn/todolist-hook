@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { DownOutlined, StarOutlined } from "@ant-design/icons";
+import { DownOutlined } from "@ant-design/icons";
 import classes from "./CompleteTask.module.css";
+import TaskListItems from "./TaskListItems";
 
-function CompleteTask({ completeItems, maskTaskUncompleted, checked }) {
+//logic add item todo
+function CompleteTask({ completeItems, markTaskUncompleted, checked }) {
   const [hide, setHide] = useState(true);
   const onHandleShowHide = () => {
     setHide(!hide);
@@ -16,24 +18,14 @@ function CompleteTask({ completeItems, maskTaskUncompleted, checked }) {
           <span>{completeItems.length}</span>
         </div>
         <ul>
-          {completeItems.map((task) => {
-            return (
-              <li key={task.id} className={hide ? classes.hide : classes.show}>
-                <div className={classes.wrapItem}>
-                  <div className={classes.wrap}>
-                    <input
-                      name={task.item}
-                      type="checkbox"
-                      defaultChecked={task.isCompleted ? checked : ""}
-                      onClick={() => maskTaskUncompleted(task.id)}
-                    />
-                    <label>{task.item}</label>
-                  </div>
-                  <StarOutlined />
-                </div>
-              </li>
-            );
-          })}
+          {completeItems.map((task) => (
+            <TaskListItems
+              key={task.id}
+              task={task}
+              markTaskUncompleted={markTaskUncompleted}
+              checked={checked}
+            />
+          ))}
         </ul>
       </section>
     </div>

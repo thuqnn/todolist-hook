@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import CompleteTask from "./components/CompleteTask";
 import Header from "./components/Header";
@@ -7,55 +7,33 @@ import TaskList from "./components/TaskList";
 import "./App.css";
 
 function App() {
-  const [currentItem, setCurrentItem] = useState(""); //input = ""
   const [taskLists, setTaskLists] = useState([]); //data = []
   const [checked] = useState(true);
-  const [selected, setSelected] = useState("");
+  const [selectedCompleted, setSelectedCompleted] = useState("");
 
-  const onHandleChange = (value) => {
-    setCurrentItem(value);
-  };
-
-  const onHandeEnter = (event) => {
-    if (event.keyCode === 13) {
-      setTaskLists(
-        [
-          {
-            item: currentItem,
-            id: new Date().getTime(),
-            isCompleted: false,
-            isFavorite: false,
-          },
-          ...taskLists,
-        ].sort((a, b) => a.id - b.id)
-      );
-      setCurrentItem("");
-    }
-  };
-
-  const maskTaskCompleted = (id) => {
+  const markTaskCompleted = (id) => {
     const tasks = taskLists.find((task) => task.id === id);
-    tasks.isCompleted = true;
-    setTaskLists((taskLists) =>
-      [tasks, ...taskLists.filter((item) => item.id !== id)].sort(
-        (a, b) => a.id - b.id
-      )
-    );
+    setTaskLists((taskLists) => [
+      { ...tasks, isCompleted: true },
+      ...taskLists.filter((item) => item.id !== id),
+    ]);
   };
 
-  const incompleteItems = taskLists.filter((item) => !item.isCompleted);
-  const completeItems = taskLists.filter((item) => item.isCompleted);
+  const incompleteItems = taskLists
+    .filter((task) => !task.isCompleted)
+    .sort((a, b) => b.id - a.id);
 
-  const maskTaskUncompleted = (id) => {
+  const completeItems = taskLists
+    .filter((task) => task.isCompleted)
+    .sort((a, b) => a[0] - b[1]);
+
+  const markTaskUncompleted = (id) => {
     const tasks = taskLists.find((task) => task.id === id);
-    tasks.isCompleted = false;
-    setTaskLists((taskLists) =>
-      [...taskLists.filter((item) => item.id !== id), tasks].sort(
-        (a, b) => a.id - b.id
-      )
-    );
+    setTaskLists((taskLists) => [
+      ...taskLists.filter((item) => item.id !== id),
+      { ...tasks, isCompleted: false },
+    ]);
   };
-
   const onHandleFavorite = (id) => {
     const checkFavorite = (taskLists.isFavorite = true);
 
@@ -66,29 +44,25 @@ function App() {
         ...taskLists.filter((item) => item.id !== id),
       ]);
     }
-    setSelected({ id });
+    setSelectedCompleted({ id });
   };
 
   return (
     <div className="App">
-      <Header
-        onHandeEnter={onHandeEnter}
-        onHandleChange={onHandleChange}
-        currentItem={currentItem}
-      />
+      <Header setTaskLists={setTaskLists} taskLists={taskLists} />
       <TaskList
-        maskTaskCompleted={maskTaskCompleted}
+        markTaskCompleted={markTaskCompleted}
         incompleteItems={incompleteItems}
         onHandleFavorite={onHandleFavorite}
-        selected={selected}
+        selectedCompleted={selectedCompleted}
       />
       <CompleteTask
         completeItems={completeItems}
         checked={checked}
-        maskTaskUncompleted={maskTaskUncompleted}
+        markTaskUncompleted={markTaskUncompleted}
       />
     </div>
   );
 }
 
-export default App;
+export default React.memo(App);
