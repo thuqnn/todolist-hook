@@ -1,50 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import _ from "lodash";
 import CompleteTask from "./components/CompleteTask";
 import Header from "./components/Header";
 import TaskList from "./components/TaskList";
-
+import { connect } from "react-redux";
 import "./App.css";
 
-function App() {
-  const [taskLists, setTaskLists] = useState([]);
-
-  const handleAddTodo = (newTaskName) => {
-    setTaskLists([
-      ...taskLists,
-      {
-        id: new Date().getTime(),
-        createdDate: new Date().getTime(),
-        completedDate: null,
-        taskName: newTaskName,
-        isCompleted: false,
-        isFavorite: false,
-      },
-    ]);
-  };
-
-  const handleChangeCompleteStatus = (taskId, newStatus) => {
-    setTaskLists(
-      taskLists.map((t) =>
-        t.id === taskId
-          ? {
-              ...t,
-              isCompleted: newStatus,
-              completedDate: new Date().getTime(),
-            }
-          : t
-      )
-    );
-  };
-
-  const handleChangeFavoriteStatus = (taskId, newStatus) => {
-    setTaskLists(
-      taskLists.map((t) =>
-        t.id === taskId ? { ...t, isFavorite: newStatus } : t
-      )
-    );
-  };
-
+function App({ taskLists }) {
   const [completedList, inCompletedList] = _.partition(
     taskLists,
     (t) => t.isCompleted
@@ -52,19 +14,15 @@ function App() {
 
   return (
     <div className="App">
-      <Header onAddTodo={handleAddTodo} />
-      <TaskList
-        incompleteItems={inCompletedList}
-        onChangeCompleteStatus={handleChangeCompleteStatus}
-        onChangeFavoriteStatus={handleChangeFavoriteStatus}
-      />
-      <CompleteTask
-        completedItems={completedList}
-        onChangeCompleteStatus={handleChangeCompleteStatus}
-        onChangeFavoriteStatus={handleChangeFavoriteStatus}
-      />
+      <Header />
+      <TaskList incompleteItems={inCompletedList} />
+      <CompleteTask completedItems={completedList} />
     </div>
   );
 }
-
-export default React.memo(App);
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    taskLists: state.addTodos.taskLists,
+  };
+};
+export default connect(mapStateToProps)(App);

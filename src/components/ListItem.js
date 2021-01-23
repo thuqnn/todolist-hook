@@ -1,24 +1,14 @@
 import React from "react";
 import TaskListItems from "./TaskListItems";
 import classes from "./ListItem.module.css";
-import _ from "lodash";
 
-export default function ListItem({
-  renderedItems,
-  listName,
-  onChangeCompleteStatus,
-  onChangeFavoriteStatus,
-}) {
+export default function ListItem({ listName, renderedItems }) {
   return (
     <section className={classes.listTask}>
       <h2>{listName}</h2>
       <ul>
-        {renderedItems.map((task) => (
-          <TaskListItems
-            task={task}
-            onChangeCompleteStatus={onChangeCompleteStatus}
-            onChangeFavoriteStatus={onChangeFavoriteStatus}
-          />
+        {renderedItems.map((task, index) => (
+          <TaskListItems task={task} key={index} />
         ))}
       </ul>
     </section>

@@ -1,20 +1,18 @@
 import React from "react";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 import classes from "./TaskListItems.module.css";
+import { connect } from "react-redux";
+import { onChangeCompletedTodo, onChangeFavoriteTodo } from "../actionCreator";
 
-function TaskListItems({
-  task,
-  onChangeCompleteStatus,
-  onChangeFavoriteStatus,
-}) {
+function TaskListItems({ onChangeCompletedTodo, onChangeFavoriteTodo, task }) {
   return (
     <li key={task.id}>
       <div className={classes.wrapItem}>
         <div className={classes.wrap}>
           <input
-            checked={task.isCompleted}
+            defaultChecked={task.isCompleted}
             type="checkbox"
-            onClick={() => onChangeCompleteStatus(task.id, !task.isCompleted)}
+            onClick={() => onChangeCompletedTodo(task.id, !task.isCompleted)}
           />
           <label>{task.taskName}</label>
         </div>
@@ -22,18 +20,26 @@ function TaskListItems({
           <span></span>
         ) : task.isFavorite ? (
           <StarFilled
-            onClick={() => onChangeFavoriteStatus(task.id, !task.isFavorite)}
+            onClick={() => onChangeFavoriteTodo(task.id, !task.isFavorite)}
             style={{
               color: "blue",
             }}
           />
         ) : (
           <StarOutlined
-            onClick={() => onChangeFavoriteStatus(task.id, !task.isFavorite)}
+            onClick={() => onChangeFavoriteTodo(task.id, !task.isFavorite)}
           />
         )}
       </div>
     </li>
   );
 }
-export default TaskListItems;
+
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    taskLists: state.addTodos.taskLists,
+  };
+};
+const mapDispatchToProps = { onChangeCompletedTodo, onChangeFavoriteTodo };
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskListItems);
