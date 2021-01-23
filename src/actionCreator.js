@@ -15,9 +15,10 @@ export const onAddTodos = (newTaskName) => ({
   },
 });
 
-export const onChangeCompletedTodo = (newStatus) => ({
+export const onChangeCompletedTodo = (taskId, newStatus) => ({
   type: "HANDLE_CHANGE_COMPLETED_TODO",
   payload: {
+    taskId,
     isCompleted: newStatus,
   },
 });

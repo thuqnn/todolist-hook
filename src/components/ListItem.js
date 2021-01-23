@@ -7,8 +7,8 @@ export default function ListItem({ listName, renderedItems }) {
     <section className={classes.listTask}>
       <h2>{listName}</h2>
       <ul>
-        {renderedItems.map((task, index) => (
-          <TaskListItems task={task} key={index} />
+        {renderedItems.map((task) => (
+          <TaskListItems task={task} key={task.id} />
         ))}
       </ul>
     </section>
