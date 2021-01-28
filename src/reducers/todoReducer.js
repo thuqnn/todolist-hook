@@ -43,12 +43,6 @@ const addTodos = function (state = initialState, action) {
         ),
       };
     }
-    case "HANDLE_SORT_COMPLETED_TODO": {
-      return {
-        ...state,
-        taskLists: [...state.taskLists, action.payload.isCompleted],
-      };
-    }
     default:
       return {
         ...state,

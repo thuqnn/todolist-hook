@@ -1,28 +1,55 @@
-import React from "react";
-import _ from "lodash";
-import CompleteTask from "./components/CompleteTask";
-import Header from "./components/Header";
-import TaskList from "./components/TaskList";
-import { connect } from "react-redux";
+import React, { useState } from "react";
+import Login from "./Login/Login";
 import "./App.css";
+import Home from "./components/Home";
+import { Profile } from "./Profile/Profile";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { LISTACCOUNTS } from "./mockup/index";
+function App() {
+  const [user, setUser] = useState({ name: "", email: "" });
+  const [error, setError] = useState("");
 
-function App({ taskLists }) {
-  const [completedList, inCompletedList] = _.partition(
-    taskLists,
-    (t) => t.isCompleted
-  );
+  const onLogin = (details) => {
+    LISTACCOUNTS.map((item) => {
+      if (details.email === item.email && details.password === item.password) {
+        setUser({
+          name: details.name,
+          email: details.email,
+        });
+      } else {
+        setError("Details do not match!");
+      }
+    });
+  };
+  const onLogout = () => {
+    setUser({ name: "", email: "" });
+  };
 
   return (
-    <div className="App">
-      <Header />
-      <TaskList incompleteItems={inCompletedList} />
-      <CompleteTask completedItems={completedList} />
-    </div>
+    <Router>
+      <Switch>
+        {user.email !== "" ? (
+          <div className="welcome">
+            <h2>
+              Welcome : <span>{user.name}</span>
+            </h2>
+            <Route path="/todo">
+              <Home />
+            </Route>
+            <button onClick={onLogout}>Logout</button>
+          </div>
+        ) : (
+          <Route path="/">
+            <Login onLogin={onLogin} error={error} />
+          </Route>
+        )}
+
+        <Route path="/profile">
+          <Profile />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
-const mapStateToProps = (state /*, ownProps*/) => {
-  return {
-    taskLists: state.addTodos.taskLists,
-  };
-};
-export default connect(mapStateToProps)(App);
+
+export default App;
